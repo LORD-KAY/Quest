@@ -4,6 +4,7 @@ var express = require('express'),
     User_Verification = require('./models/user_verification'),
     Task_Label = require('./models/task_label'),
     jwt  = require('jsonwebtoken'),
+    bcryptjs = require('bcryptjs'),
     config = require('./config');
 
     //Defining the router
@@ -232,7 +233,7 @@ var express = require('express'),
     apiRouter.put('/task/label/edit',function(req,res){
         var label_id = req.body.label_id,
             task_id  = req.body.task_id;
-            
+
 
     });
 

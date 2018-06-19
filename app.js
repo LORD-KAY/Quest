@@ -5,10 +5,13 @@ var express = require('express'),
     express_session = require('express-session'),
     bodyParser = require('body-parser'),
     jwt  = require('jsonwebtoken'),
+    bcryptjs = require('bcryptjs'),
+    nodemailer = require('nodemailer'),
     config = require('./config'),
     User  = require('./models/user'),
     Task  = require('./models/tasks'),
     User_Verification = require('./models/user_verification'),
+    tokenNotifier  = require('./mailer/nodemailer'),
     apiRouter = require('./router');
 
 //Instantiating the express  application
@@ -63,6 +66,8 @@ app.post('/signup',function(req,res){
                 // Generating the verification token and saving it into the user_verification table
                 var user_fk   = data._id,
                     generated_token = genToken(10000,99999);
+                //Send the generated token to the email
+                tokenNotifier("lordkay1996@gmail.com",data.email,data.fullname,generated_token);
                 var auth_token = new User_Verification({
                     token: generated_token,
                     user_id: user_fk
@@ -96,7 +101,7 @@ app.post('/signup',function(req,res){
         res.json(users)
     });
 });
- 
+
 app.get('/users/tokens',function(req,res){
     User_Verification.find()
         .populate({ path : 'user_id', select: 'email'})
