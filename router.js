@@ -198,7 +198,7 @@ var express = require('express'),
         
     })
     
-    // Endpoint for task labels --> /label/add --> /label/:id/edit --> /label/:id/delete
+    // Endpoint for task labels 
     apiRouter.post('/task/label/add',function(req,res){
         var user_id = req.decoded.admin_id,
             task_id = req.body.task_id,
@@ -223,6 +223,15 @@ var express = require('express'),
                 });
             }
         })
+    });
+
+    apiRouter.get('/task/label',function(req,res){
+
+    });
+
+    apiRouter.put('/task/label/edit',function(req,res){
+        var label_id = req.body.label_id;
+
     });
 
     apiRouter.get('/logout',function(req,res){
