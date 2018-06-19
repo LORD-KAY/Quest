@@ -91,7 +91,7 @@ var express = require('express'),
 
 
     //Getting all the tasks added by a user /task/all
-    apiRouter.get('/tasks/all',function(req,res){
+    apiRouter.get('/task/all',function(req,res){
         Task.find({ user_id: req.decoded.admin_id })
             .populate('user_id')
             .sort({ createdAt: "descending" })
@@ -179,13 +179,6 @@ var express = require('express'),
     })
 
     // Delete Tasks End Points
-    // Endpoint for deleting all tasks added by a particular user
-    apiRouter.get('/tasks/delete/all',function(req,res){
-    	
-    })
-
-    //Endpoint for deleting tasks selected by a particular added user
-
     //Endpoint for deleting a single task added by a particular user
     apiRouter.get('/tasks/delete/:id',function(req,res){
     	var task_id = req.params.id;
@@ -195,10 +188,16 @@ var express = require('express'),
     		.exec(function(err,results){
     			res.json({
     				success:results
-    			})
-    		})
+    			});
+    		});
 
+    });
+    // Endpoint for deleting all tasks added by a particular user
+    apiRouter.get('/tasks/delete/all',function(req,res){
+        
     })
+    
+    // Endpoint for editing a label
     
     apiRouter.get('/logout',function(req,res){
     	
