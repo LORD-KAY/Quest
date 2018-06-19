@@ -22,7 +22,9 @@ var tokenNotifier = function(fromEmail,toEmail,toName,code){
 		from: fromEmail,
 		to: toEmail,
 		subject: 'Accounts Activation Code',
-		html: "<h3> Hi "+ toName + ",</h4><br/><p>Thank you for signing up for Quest - A Intuitive Task App.</p><br/><p>Please you this code "+ code +" to activate your accounts</p>"
+		html: "<h3> Hi "+ toName + ",</h3><br/><p>Thank you for signing up for Quest - A Intuitive Task App.</p><p>Please you this code "+ code +" to activate your accounts. Once your accounts is activated , \
+		you can enjoy all the amazing experience that comes with <strong>Quest</strong>\
+		 </p>"
 	}
 	transporter.sendMail(message,function(err,info){
 		if(!err){
