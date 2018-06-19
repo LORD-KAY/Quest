@@ -36,7 +36,6 @@ app.get('/',function(request,response,next){
     response.send('Hello! The API is a lit');
 })
 
-
 //Adding a user to the database
 function checkPassword(password, password1){
     return password == password1;
@@ -97,7 +96,8 @@ app.post('/signup',function(req,res){
         res.json(users)
     });
 });
-app.get('/users/alldocs',function(req,res){
+ 
+app.get('/users/tokens',function(req,res){
     User_Verification.find()
         .populate({ path : 'user_id', select: 'email'})
         .sort({created_at:'descending'})
@@ -105,13 +105,6 @@ app.get('/users/alldocs',function(req,res){
             res.json(data)
         })
 })
-
-
-app.get('/verification-tokens',function(req,res){
-    User_Verification.find({},function(err,tokens){
-        res.json(tokens)
-    });
-});
 
 //Deleting the original data
 app.get('/delete/:id',function(req,res){
