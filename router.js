@@ -230,7 +230,9 @@ var express = require('express'),
     });
 
     apiRouter.put('/task/label/edit',function(req,res){
-        var label_id = req.body.label_id;
+        var label_id = req.body.label_id,
+            task_id  = req.body.task_id;
+            
 
     });
 
