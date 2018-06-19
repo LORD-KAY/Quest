@@ -2,6 +2,7 @@ var express = require('express'),
     User   = require('./models/user'),
     Task  = require('./models/tasks'),
     User_Verification = require('./models/user_verification'),
+    Task_Label = require('./models/task_label'),
     jwt  = require('jsonwebtoken'),
     config = require('./config');
 
@@ -197,8 +198,33 @@ var express = require('express'),
         
     })
     
-    // Endpoint for editing a label
-    
+    // Endpoint for task labels --> /label/add --> /label/:id/edit --> /label/:id/delete
+    apiRouter.post('/task/label/add',function(req,res){
+        var user_id = req.decoded.admin_id,
+            task_id = req.body.task_id,
+            task_label = req.body.task_label;
+
+        var qs = new Task_Label({
+            label_name: task_label,
+            task_id: task_id,
+            user_id: user_id
+        });
+
+        qs.save(function(err,data){
+            if(!err){
+                res.json({
+                    results: data,
+                    message: "Label created successfully"
+                });
+            }else{
+                res.json({
+                    results: err,
+                    message: "Error Occurred"
+                });
+            }
+        })
+    });
+
     apiRouter.get('/logout',function(req,res){
     	
 
