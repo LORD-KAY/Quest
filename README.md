@@ -1,6 +1,7 @@
 # Quest
 Quest - "An intuitive task manager for the web" <br/>
-A Front End Design with a back end API support developed with express js 
+A Front End Design with a back end API support developed with express js <br/>
+This is a personal project i'm doing to develop a well combined experience of todo app and task features
 ## Motive
 Quest is a personal project designed mainly for managing task, taking notes with an excellent intuitive design 
 
