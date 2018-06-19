@@ -8,6 +8,7 @@ var express = require('express'),
     config = require('./config'),
     User  = require('./models/user'),
     Task  = require('./models/tasks'),
+    User_Verification = require('./models/user_verification'),
     apiRouter = require('./router');
 
 //Instantiating the express  application
@@ -35,6 +36,96 @@ app.get('/',function(request,response,next){
     response.send('Hello! The API is a lit');
 })
 
+
+//Adding a user to the database
+function checkPassword(password, password1){
+    return password == password1;
+}
+
+function genToken(min,max){
+    return Math.floor((Math.random() * (max + min)) + min)
+}
+
+app.post('/signup',function(req,res){
+    var fullname = req.body.fullname,
+        email    = req.body.email,
+        password = req.body.password,
+        confirm_password = req.body.password;
+    if (checkPassword(password,confirm_password)) {
+        var user_details = new User({
+            fullname: fullname,
+            email: email,
+            password: password,
+            confirm_password: confirm_password
+        })
+
+        user_details.save(function(err,data){
+            if (!err) {
+                // Generating the verification token and saving it into the user_verification table
+                var user_fk   = data._id,
+                    generated_token = genToken(10000,99999);
+                var auth_token = new User_Verification({
+                    token: generated_token,
+                    user_id: user_fk
+                });
+
+                auth_token.save(function(err,data){
+                    if(!err){
+                        res.json({
+                            data:data
+                        })
+                    }else{
+                        res.json({
+                            failure: err
+                        })
+                    }
+                })
+                
+            }else{
+                res.json({
+                    failure: err
+                });
+            }
+        })
+    }
+
+})
+
+//These things are temporal routes
+ app.get('/users',function(req,res){
+    User.find({},function(err,users){
+        res.json(users)
+    });
+});
+app.get('/users/alldocs',function(req,res){
+    User_Verification.find()
+        .populate({ path : 'user_id', select: 'email'})
+        .sort({created_at:'descending'})
+        .exec(function(err,data){
+            res.json(data)
+        })
+})
+
+
+app.get('/verification-tokens',function(req,res){
+    User_Verification.find({},function(err,tokens){
+        res.json(tokens)
+    });
+});
+
+//Deleting the original data
+app.get('/delete/:id',function(req,res){
+    var data_id = req.params.id;
+    User.findById({ _id: data_id })
+        .exec(function(err,data){
+            if (!err) {
+                data.remove();
+                res.json({
+                    success: 'Deleting was a lit'
+                })
+            }
+        })
+})
 
 // Calling the api configs here
 app.use('/api/v1',apiRouter);
