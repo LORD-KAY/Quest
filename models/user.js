@@ -18,7 +18,7 @@ var userSchema = new Schema({
 	email:{
 		type:String,
 		require:true,
-		unique:true,
+		unique: true,
 		set:emailFormatter
 	},
 	password:{
@@ -53,6 +53,7 @@ userSchema.pre('remove',function(next){
 	Task.remove({ user_id: this._id }).exec();
 	next();
 });
+
 //Creating methods for the user schema
 
 
