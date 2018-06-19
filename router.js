@@ -159,7 +159,14 @@ var express = require('express'),
 
         Query.update({ $set: pars })
         .exec(function(err,data){
-            res.json(data)
+            if(!err){
+                res.json(data)
+            }else{
+                res.json({
+                    error: err,
+                    failure: "Unable to update task"
+                });
+            }
         });
     })
     // Special access token url
@@ -170,7 +177,6 @@ var express = require('express'),
     		access: access
     	})
     })
-
 
     // Delete Tasks End Points
     // Endpoint for deleting all tasks added by a particular user
@@ -198,11 +204,6 @@ var express = require('express'),
     	
 
     })
-
-
-
-
-
 
 
     //Exporting the data to be used by other modules
