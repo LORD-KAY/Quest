@@ -20,9 +20,18 @@ var task = new Schema({
 	createdAt:{
 		type:Date,
 		default: Date.now
+	},
+	updatedAt:{
+		type:Date,
+		default: Date.now
 	}
 });
 
+// Creating signals for the tables
+// task.pre('save',function(next){
+// 	this.updatedAt(Date.now())
+// 	next();
+// });
 
 var Task = mongoose.model('Task',task);
 module.exports = Task;
