@@ -11,63 +11,10 @@ var express = require('express'),
 
     app.set('superSecret',config.secret);
 
-    //Adding a user to the database
-    function checkPassword(password, password1){
-        return password == password1;
-    }
-
-    function genToken(min,max){
-        return Math.random((Math.random() * (max + min)) + min)
-    }
-
-    app.get('/signup',function(req,res){
-        var fullname = req.body.fullname,
-            email    = req.body.email,
-            password = req.body.password,
-            confirm_password = req.body.password,
-        if (checkPassword(password,confirm_password)) {
-            var user_details = new User({
-                fullname: fullname,
-                email: email,
-                password: password,
-                confirm_password: confirm_password
-            })
-
-            user_details.save(function(err,data){
-                if(err){
-                    res.json({
-                        failure: "An Error Occurred"
-                    });
-                }else {
-                    // Generating the verification token and saving it into the user_verification table
-                    var auth_token = new User_Verification({
-                        token: genToken(100000,999999),
-                        user_id: req.body.email
-                    });
-
-                    auth_token.save(function(err,data){
-                        if (err) {
-                            res.json({
-                                failure: err
-                            });
-                        }else{
-                            res.json({
-                                success: "User Successfully saved",
-                                results: data
-                            });
-                        }
-                    });
-
-                }
-            })
-        }
-
-    })
-
     // Authentication router
     apiRouter.post('/authenticate',function(req,res){
         User.findOne({
-            name: req.body.name
+            email: req.body.email
         },function(err,user){
             if(err) console.log(err)
 
@@ -120,18 +67,40 @@ var express = require('express'),
             });
         }
     });
-    //Defining the routes
+    //Defining the routes /home
     apiRouter.get('/home',function(req,res){
         res.send("This is the inner API Configs and Routes")
     });
 
-    apiRouter.get('/users',function(req,res){
-        User.find({},function(err,users){
-            res.json(users)
-        });
+    /********* USERS **************/
+    // Getting user details
+    apiRouter.route('/user')
+             .get(function(req,res,next){
+                var current_id = req.decoded.admin_id;
+                User.where({ _id: current_id })
+                    .exec(function(err,data){
+                        res.json(data)
+                    });
+             })
+             .put(function(req,res,next){
+                
+             })
+             .delete(function(req,res,next){
+                next(new Error('Not implemented'))
+             });
+
+
+    //Getting all the tasks added by a user /task/all
+    apiRouter.get('/tasks/all',function(req,res){
+        Task.find({ user_id: req.decoded.admin_id })
+            .populate('user_id')
+            .sort({ createdAt: "descending" })
+            .exec(function(error,tasks){
+                res.json(tasks)
+            });
     });
 
-    //Adding a task to the system
+    //Adding a task to the system /task/add
     apiRouter.post('/task/add',function(req,res){
     	var data = {
     		title : req.body.title,
@@ -144,7 +113,7 @@ var express = require('express'),
     	results.save(function(error,data){
     		if (error) {
     			res.json({
-    				failure: "Tasks wasn't able to save"
+    				failure: "Tasks wasn't able to save",
     			});
     		}
     		else{
@@ -176,16 +145,23 @@ var express = require('express'),
     	})
     })
 
-    //Getting all the tasks added by a user
-    apiRouter.get('/tasks/all',function(req,res){
-    	Task.find({ user_id: req.decoded.admin_id })
-    		.populate('user_id')
-    		.sort({ createdAt: "descending" })
-    		.exec(function(error,tasks){
-    			res.json(tasks)
-    		});
-    });
+    // Updating a single data
+    apiRouter.put('/task/update/:id',function(req,res){
+        var task_id = req.params.id;
+        var Query = Task.find({ _id: task_id });
+        var pars = {
+            title: req.body.title,
+            description: req.body.description,
+            completed: req.body.completed,
+            color: req.body.color,
+            updatedAt: Date.now()
+        };
 
+        Query.update({ $set: pars })
+        .exec(function(err,data){
+            res.json(data)
+        });
+    })
     // Special access token url
     apiRouter.get('/access-token',function(req,res){
     	var access = req.decoded;
@@ -224,16 +200,6 @@ var express = require('express'),
     })
 
 
-    //Deleting the original data
-    apiRouter.get('/delete/all',function(req,res){
-        User.remove({},function(err,data){
-            if (!err) {
-                res.json({
-                    success:" Data removal was lit"
-                })
-            }
-        })
-    })
 
 
 
