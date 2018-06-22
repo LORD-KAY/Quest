@@ -55,14 +55,20 @@ app.post('/signup',function(req,res){
         confirm_password = req.body.password;
     if (checkPassword(password,confirm_password)) {
         //Using bcrypt to secure the password
-        bcrypt.hash()
+        let hash_password
+        bcrypt.genSalt(SALT_FACTOR,function(err,salt){
+            console.log(salt);
+            bcrypt.hash(confirm_password,salt,function(err,hash){
+                hash_password = hash
+            });
+        });
+
         var user_details = new User({
             fullname: fullname,
             email: email,
-            password: password,
-            confirm_password: confirm_password
-        })
-
+            password: hash_password,
+            confirm_password: hash_password
+        });
         user_details.save(function(err,data){
             if (!err) {
                 // Generating the verification token and saving it into the user_verification table
