@@ -5,7 +5,7 @@ var express = require('express'),
     express_session = require('express-session'),
     bodyParser = require('body-parser'),
     jwt  = require('jsonwebtoken'),
-    bcryptjs = require('bcryptjs'),
+    bcrypt = require('bcryptjs'),
     nodemailer = require('nodemailer'),
     config = require('./config'),
     User  = require('./models/user'),
@@ -55,50 +55,46 @@ app.post('/signup',function(req,res){
         confirm_password = req.body.password;
     if (checkPassword(password,confirm_password)) {
         //Using bcrypt to secure the password
-        let hash_password
         bcrypt.genSalt(SALT_FACTOR,function(err,salt){
-            console.log(salt);
-            bcrypt.hash(confirm_password,salt,function(err,hash){
-                hash_password = hash
-            });
-        });
-
-        var user_details = new User({
-            fullname: fullname,
-            email: email,
-            password: hash_password,
-            confirm_password: hash_password
-        });
-        user_details.save(function(err,data){
-            if (!err) {
-                // Generating the verification token and saving it into the user_verification table
-                var user_fk   = data._id,
-                    generated_token = genToken(10000,99999);
-                //Send the generated token to the email
-                tokenNotifier("lordkay1996@gmail.com",data.email,data.fullname,generated_token);
-                var auth_token = new User_Verification({
-                    token: generated_token,
-                    user_id: user_fk
+            bcrypt.hash(confirm_password,salt,function(err,hash_password){
+                 var user_details = new User({
+                    fullname: fullname,
+                    email: email,
+                    password: hash_password,
+                    confirm_password: hash_password
                 });
+                user_details.save(function(err,data){
+                    if (!err) {
+                        // Generating the verification token and saving it into the user_verification table
+                        var user_fk   = data._id,
+                            generated_token = genToken(10000,99999);
+                        //Send the generated token to the email
+                        tokenNotifier("lordkay1996@gmail.com",data.email,data.fullname,generated_token);
+                        var auth_token = new User_Verification({
+                            token: generated_token,
+                            user_id: user_fk
+                        });
 
-                auth_token.save(function(err,data){
-                    if(!err){
-                        res.json({
-                            data:data
+                        auth_token.save(function(err,data){
+                            if(!err){
+                                res.json({
+                                    data:data
+                                })
+                            }else{
+                                res.json({
+                                    failure: err
+                                })
+                            }
                         })
+                        
                     }else{
                         res.json({
                             failure: err
-                        })
+                        });
                     }
                 })
-                
-            }else{
-                res.json({
-                    failure: err
-                });
-            }
-        })
+            });
+        });
     }
 
 })
