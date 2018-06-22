@@ -54,6 +54,7 @@ app.post('/signup',function(req,res){
         password = req.body.password,
         confirm_password = req.body.password;
     if (checkPassword(password,confirm_password)) {
+        //Using bcrypt to secure the password
         var user_details = new User({
             fullname: fullname,
             email: email,
