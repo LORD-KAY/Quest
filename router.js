@@ -4,7 +4,7 @@ var express = require('express'),
     User_Verification = require('./models/user_verification'),
     Task_Label = require('./models/task_label'),
     jwt  = require('jsonwebtoken'),
-    bcryptjs = require('bcryptjs'),
+    bcrypt = require('bcryptjs'),
     config = require('./config');
 
     //Defining the router
@@ -23,6 +23,8 @@ var express = require('express'),
             if(!user){
                 res.json({success: false, message:'Authentication failed. User not found.'})
             }else if(user){
+                //implementing the bcrypt hash for comparison
+
                 if(user.password != req.body.password ){
                     res.json({
                         success: false,
