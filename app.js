@@ -21,9 +21,9 @@ var app = express();
 app.set('title','Task Application API');
 app.set('port',process.env.PORT || 3000);
 
-mongoose.connect(config.database,function(){
-    console.log("Connection established")
-});
+mongoose.connect(config.database,{
+    keepAlive:130
+})
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
