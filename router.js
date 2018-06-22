@@ -29,7 +29,7 @@ var express = require('express'),
                         res.status(401).json({
                             success:false,
                             message: 'Authentication failed. Wrong Password',
-                        })
+                        });
                     }else{
                          const payload = {
                                 admin_id:user._id
