@@ -95,6 +95,11 @@ app.post('/signup',function(req,res){
                 })
             });
         });
+    }else{
+        res.status(402).json({
+            success:false,
+            message: 'Password doesn\'t match'
+        });
     }
 
 })
