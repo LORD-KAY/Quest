@@ -24,26 +24,27 @@ var express = require('express'),
                 res.json({success: false, message:'Authentication failed. User not found.'})
             }else if(user){
                 //implementing the bcrypt hash for comparison
-
-                if(user.password != req.body.password ){
-                    res.json({
-                        success: false,
-                        message:'Authentication failed. Wrong password.'
-                    });
-                }else{
-                    const payload = {
-                        admin_id:user._id
+                bcrypt.compare(req.body.password,user.confirm_password).then((res) => {
+                    if (!res) {
+                        res.status(401).json({
+                            success:false,
+                            message: 'Authentication failed. Wrong Password',
+                        })
+                    }else{
+                         const payload = {
+                                admin_id:user._id
+                            }
+                        var token = jwt.sign(payload, app.get('superSecret'),{
+                            algorithm: 'HS256',
+                            expiresIn: '1440s'
+                        });
+                        res.json({
+                            success:true,
+                            message: 'Enjoy your token',
+                            token:token
+                        });
                     }
-                    var token = jwt.sign(payload, app.get('superSecret'),{
-                        algorithm: 'HS256',
-                        expiresIn: '1440s'
-                    });
-                    res.json({
-                        success:true,
-                        message: 'Enjoy your token',
-                        token:token
-                    });
-                }
+                })
             }
         })
     })
