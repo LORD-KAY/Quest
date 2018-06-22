@@ -24,8 +24,8 @@ var express = require('express'),
                 res.json({success: false, message:'Authentication failed. User not found.'})
             }else if(user){
                 //implementing the bcrypt hash for comparison
-                bcrypt.compare(req.body.password,user.confirm_password).then((res) => {
-                    if (!res) {
+                bcrypt.compare(req.body.password,user.confirm_password).then((data) => {
+                    if (!data) {
                         res.status(401).json({
                             success:false,
                             message: 'Authentication failed. Wrong Password',
@@ -40,7 +40,7 @@ var express = require('express'),
                         });
                         res.json({
                             success:true,
-                            message: 'Enjoy your token',
+                            message: 'Token successfully generated',
                             token:token
                         });
                     }
