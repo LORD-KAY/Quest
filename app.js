@@ -120,7 +120,8 @@ app.get('/delete/:id',function(req,res){
             if (!err) {
                 data.remove();
                 res.json({
-                    success: 'Deleting was a lit'
+                    success: true,
+                    message: 'Deleting a user was successful'
                 })
             }
         })
