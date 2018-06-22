@@ -16,7 +16,7 @@ var express = require('express'),
 
 //Instantiating the express  application
 var app = express();
-
+var SALT_FACTOR = 10;
 //Setting the basic initials
 app.set('title','Task Application API');
 app.set('port',process.env.PORT || 3000);
@@ -55,6 +55,7 @@ app.post('/signup',function(req,res){
         confirm_password = req.body.password;
     if (checkPassword(password,confirm_password)) {
         //Using bcrypt to secure the password
+        bcrypt.hash()
         var user_details = new User({
             fullname: fullname,
             email: email,
@@ -119,9 +120,14 @@ app.get('/delete/:id',function(req,res){
         .exec(function(err,data){
             if (!err) {
                 data.remove();
-                res.json({
+                res.status(200).json({
                     success: true,
                     message: 'Deleting a user was successful'
+                })
+            }else{
+                res.status(401).json({
+                    success: false,
+                    message: 'Unknown error occurred'
                 })
             }
         })
