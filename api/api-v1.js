@@ -1,11 +1,11 @@
 var express = require('express'),
-    User   = require('./models/user'),
-    Task  = require('./models/tasks'),
-    User_Verification = require('./models/user_verification'),
-    Task_Label = require('./models/task_label'),
+    User   = require('../models/user'),
+    Task  = require('../models/tasks'),
+    User_Verification = require('../models/user_verification'),
+    Task_Label = require('../models/task_label'),
     jwt  = require('jsonwebtoken'),
     bcrypt = require('bcryptjs'),
-    config = require('./config');
+    config = require('../config');
 
     //Defining the router
     var app = express()
