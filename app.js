@@ -21,9 +21,7 @@ var SALT_FACTOR = 10;
 app.set('title','Task Application API');
 app.set('port',process.env.PORT || 3000);
 
-mongoose.connect(config.database,{
-    keepAlive:130
-})
+mongoose.connect(config.database)
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -145,6 +143,6 @@ app.use('/api/v1',apiRouter);
 // app.use('/api/v2',apiRouter1);
 
 http.createServer(app).listen(app.get('port'),function(){
-    console.log("The server started at port " + app.get('port'))
+    console.log("The server started at port " + app.get('port'));
 });
 
