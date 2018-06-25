@@ -12,7 +12,7 @@ var express = require('express'),
     Task  = require('./models/tasks'),
     User_Verification = require('./models/user_verification'),
     tokenNotifier  = require('./mailer/nodemailer'),
-    apiRouter = require('./router');
+    apiRouter = require('./api/api-v1');
 
 //Instantiating the express  application
 var app = express();
