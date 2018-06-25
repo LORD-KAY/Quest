@@ -1,9 +1,8 @@
 //Tests for the task and it's label will appear here
-var assert = require('assert');
-describe('Array',function(){
-	describe('#indexOf()',function(){
-		it('should return -1 when the value is not present',function(){
-			assert.equal([1,2,3].indexOf(4),-1);
-		});
-	});
-});
+var Users = require('../models/user'),
+	User_Verification = require('../models/user_verification'),
+	task   = require('../models/tasks'),
+	task_label = require('../models/task_label');
+
+	//Writing my first test for the user models
+	
