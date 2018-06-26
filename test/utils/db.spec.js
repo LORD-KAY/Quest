@@ -1,18 +1,19 @@
-var mongoose = require('mongoose'),
-	config   = require('.../config');
-
-	before( async function(done){
-		await mongoose.connect(config.database);
-		done();
+var mongoose = require('mongoose');
+	
+	before(function(done){
+		  mongoose.connect('mongodb://127.0.0.1:27017/tasks');
+		  done();
 	});
 
-	afterEach( async function(done){
-		await db.dropCollection();
-		done();
+	after(function(done){
+		mongoose.connection.db.dropDatabase;
+		mongoose.connection.db.close;
+		done()
 	});
 
-	after( async function(done){
-		await db.dropDatabase();
-		await db.close();
-		done();
-	});
+	module.exports = function(){
+		afterEach(function(done){
+			mongoose.connection.db.dropCollection;
+			done();
+		});
+	}
