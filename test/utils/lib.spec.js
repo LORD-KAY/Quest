@@ -4,3 +4,7 @@ var User = require('.../models/user'),
 	task_label = require('.../models/task_label'),
 	mongoose = require('mongoose'),
 	config   = require('.../config');
+
+	before( async function(done){
+		await mongoose.connect(config.database);
+	})
