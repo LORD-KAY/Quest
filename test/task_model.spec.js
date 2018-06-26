@@ -1,13 +1,4 @@
-//Tests for the task and it's label will appear here
-
-
-
-	before(function(done){
-		mongoose.connect(config.database);
-		done()
-	});
-
-	//Writing my first test for the user models
+//Writing my first test for the user models
 	describe("Signing Up New User",function(){
 		describe("Save()",function(){
 			it(" should save the user to the database",function(){
