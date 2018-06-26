@@ -6,7 +6,7 @@ var User_Verification = require('./user_verification');
 
 // providing setters for the email schema
 function emailFormatter(email){
-	return email.toLowerCase();
+	return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
 }
 
 //set up mongoose model and pass it using  module.
