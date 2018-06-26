@@ -7,4 +7,5 @@ var User = require('.../models/user'),
 
 	before( async function(done){
 		await mongoose.connect(config.database);
-	})
+		done();
+	});
