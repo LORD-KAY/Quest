@@ -21,7 +21,12 @@ var SALT_FACTOR = 10;
 app.set('title','Task Application API');
 app.set('port',process.env.PORT || 3000);
 
-mongoose.connect(config.database)
+mongoose.connect(config.database) // this is a pending connection
+var db = mongoose.connection;
+db.on('error',console.error.bind(console," Connection Error "));
+db.once('open',function(){
+    console.log("Connection established")
+});
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
