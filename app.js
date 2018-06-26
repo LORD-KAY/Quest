@@ -11,7 +11,7 @@ var express = require('express'),
     User  = require('./models/user'),
     Task  = require('./models/tasks'),
     User_Verification = require('./models/user_verification'),
-    tokenNotifier  = require('./mailer/nodemailer'),
+    tokenNotifier  = require('./utils/nodemailer'),
     apiRouter = require('./api/api-v1');
 
 //Instantiating the express  application
