@@ -7,26 +7,10 @@ var User = require('../models/user'),
 	hash_password = require('./utils/bcrypt.spec');
 var db = require('./utils/db.spec');
 
-	describe(" Hash function ",function(){
-		it(" should be a function ", function(done){
-			expect(hash_password).to.be.a('function');
-			done();
-		});
-	});
-
-	// describe(" Hash password ", function(){
-	// 	it(" should encrypt the password ",function(done){
-	// 		var ps = hash_password('lordbanks');
-	// 		expect(ps).to.be.an('string');
-	// 		done();
-	// 	});
-	// });
-
 	describe("Signing up new users", function(){
 		db();
 		describe(" #Saving data",function(){
 			it("should return no error",function(done){
-				var password = hash_password('lordbanks');
 				var query = {
 					fullname: 'Acheampong Lord Offei',
 					email: 'lordkay1996@gmail.com',

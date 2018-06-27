@@ -29,7 +29,10 @@ var labelSchema = new Schema({
 });
 
 //Signals will be defined here
-
+labelSchema.pre('save',function(next){
+	this.updatedAt(Date.now());
+	next();
+});
 // exporting the module for use
 var Label = mongoose.model('Labels',labelSchema);
 module.exports = Label;
