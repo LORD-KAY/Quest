@@ -229,15 +229,49 @@ var express = require('express'),
         })
     });
 
-    apiRouter.get('/task/label',function(req,res){
-
+    apiRouter.get('/task/:id/label',function(req,res){
+        var task_params_id = req.params.id;
+        Task_Label.find({ task_id : task_params_id })
+                  .where('user_id').equals(req.decoded.admin_id)
+                  .populate('task_id')
+                  .exec(function(err,results){
+                      if(!err){
+                          res.status(200).json({
+                              message: "Data successfully retrieved",
+                              data: results
+                          });
+                      }
+                      else{
+                          res.status(203).json({
+                              message: "No data found",
+                              data:err
+                          });
+                      }
+                  });
     });
 
     apiRouter.put('/task/label/edit',function(req,res){
         var label_id = req.body.label_id,
-            task_id  = req.body.task_id;
+            label_name = req.body.task_label;
+        var Query = Task_Label.find({ _id: label_id });
+        var pars = {
+            label_name: label_name
+        };
 
-
+        Query.update({ $set: pars })
+                  .exec(function(err,data){
+                    if (!err) {
+                        res.status(200).json({
+                            message: 'Label Updated successfully',
+                            data: data
+                        });
+                    }else{
+                        res.status(203).json({
+                            message: 'Content wasn\'t updated',
+                            data: err
+                        });
+                    }
+            });
     });
 
     apiRouter.get('/logout',function(req,res){
