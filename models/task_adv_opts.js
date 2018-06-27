@@ -1,3 +1,5 @@
+import { builtinModules } from 'module';
+
 var mongoose = require('mongoose'),
     Schema   = mongoose.Schema,
     User     = require('./user'),
@@ -35,3 +37,6 @@ advanceOptionSchema.pre('save',function(next){
     this.updatedAt(Date.now());
     next();
 });
+
+var Advance_Options = mongoose.model('Task_Advance_Options',advanceOptionSchema);
+modules.exports = Advance_Options;
