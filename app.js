@@ -12,6 +12,7 @@ var express = require('express'),
     Task  = require('./models/tasks'),
     User_Verification = require('./models/user_verification'),
     tokenNotifier  = require('./utils/nodemailer'),
+    Resolvers      = require('./utils/resolvers'),
     apiRouter = require('./api/api-v1');
 
 //Instantiating the express  application
@@ -56,15 +57,14 @@ app.post('/signup',function(req,res){
         email    = req.body.email,
         password = req.body.password,
         confirm_password = req.body.password;
-    if (checkPassword(password,confirm_password)) {
+    if (Resolvers.comparePassword(password,confirm_password)) {
         //Using bcrypt to secure the password
-        bcrypt.genSalt(SALT_FACTOR,function(err,salt){
-            bcrypt.hash(confirm_password,salt,function(err,hash_password){
-                 var user_details = new User({
+        Resolvers.hashPassword(password).then( hashed => {
+              var user_details = new User({
                     fullname: fullname,
                     email: email,
-                    password: hash_password,
-                    confirm_password: hash_password
+                    password: hashed,
+                    confirm_password: hashed
                 });
                 user_details.save(function(err,data){
                     if (!err) {
@@ -95,9 +95,8 @@ app.post('/signup',function(req,res){
                             failure: err
                         });
                     }
-                })
-            });
-        });
+                });
+        })
     }else{
         res.status(402).json({
             success:false,
