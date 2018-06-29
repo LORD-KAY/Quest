@@ -22,6 +22,12 @@ var db = require('./utils/db.spec');
 			expect(data).to.be.true;
 			done();
 		});
+
+		it('should validate the password',function(done){
+			var data = Resolvers.validatePassword('LORDBANKS');
+			console.log(data);
+			done();
+		});
 	});
 
 	describe("Testing models", function(){
@@ -53,4 +59,5 @@ var db = require('./utils/db.spec');
 				done();
 			});
 		});
+
 	});
