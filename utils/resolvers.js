@@ -39,5 +39,14 @@ module.exports = {
 		if (!password.match(lowercase)) {
 			return "Must contain at least one lowercase"
 		}
+	},
+	generateValidToken: function(min,max){
+		if (isNaN(min) || isNaN(max)) {
+			return "Must be a number";
+		}
+		else{
+			var randomNumber = Math.floor((Math.random() * (max + min)) + min);
+			return randomNumber;
+		}
 	}
 }
