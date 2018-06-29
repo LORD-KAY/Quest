@@ -43,15 +43,6 @@ app.get('/',function(request,response,next){
     response.send('Hello! The API is a lit');
 })
 
-//Adding a user to the database
-function checkPassword(password, password1){
-    return password == password1;
-}
-
-function genToken(min,max){
-    return Math.floor((Math.random() * (max + min)) + min)
-}
-
 app.post('/signup',function(req,res){
     var fullname = req.body.fullname,
         email    = req.body.email,
@@ -70,7 +61,7 @@ app.post('/signup',function(req,res){
                     if (!err) {
                         // Generating the verification token and saving it into the user_verification table
                         var user_fk   = data._id,
-                            generated_token = genToken(10000,99999);
+                            generated_token = Resolvers.generateValidToken(10000,99999);
                         //Send the generated token to the email
                         tokenNotifier("lordkay1996@gmail.com",data.email,data.fullname,generated_token);
                         var auth_token = new User_Verification({
