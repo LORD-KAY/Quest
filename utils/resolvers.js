@@ -18,7 +18,7 @@ module.exports = {
 		}
 	},
 	hashPassword: function(password_data){
-		return new Promise((resolve,reject) => {
+		return new Promise(function(resolve,reject){
 			var password = password_data.toString();
 			bcrypt.genSalt(SALT_FACTOR,function(err,salt){
 				bcrypt.hash(password,salt,function(err,hash_password){
@@ -48,5 +48,9 @@ module.exports = {
 			var randomNumber = Math.floor((Math.random() * (max + min)) + min);
 			return randomNumber;
 		}
-	}
-}
+	},
+    getFirstNameCharacter: function(username){
+	    var split_data = username.toString().split(' ');
+        return split_data[0].length > 0 ? split_data[0].charAt(0) : " ";
+    }
+};
