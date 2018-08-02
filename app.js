@@ -6,6 +6,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     jwt  = require('jsonwebtoken'),
     bcrypt = require('bcryptjs'),
+    cors = require('cors'),
     nodemailer = require('nodemailer'),
     config = require('./config'),
     User  = require('./models/user'),
@@ -31,7 +32,7 @@ db.once('open',function(){
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.use(cors());
 //Activating the morgan logger
 app.use(morgan('dev'))
 app.use(function(request,response,next){

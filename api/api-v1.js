@@ -8,7 +8,7 @@ var express = require('express'),
     config = require('../config');
 
     //Defining the router
-    var app = express()
+    var app = express();
     var apiRouter = express.Router();
 
     app.set('superSecret',config.secret);
@@ -18,7 +18,7 @@ var express = require('express'),
         User.findOne({
             email: req.body.email
         },function(err,user){
-            if(err) console.log(err)
+            if(err) console.log(err);
 
             if(!user){
                 res.json({success: false, message:'Authentication failed. User not found.'})
@@ -33,7 +33,7 @@ var express = require('express'),
                     }else{
                          const payload = {
                                 admin_id:user._id
-                            }
+                            };
                         var token = jwt.sign(payload, app.get('superSecret'),{
                             algorithm: 'HS256',
                             expiresIn: '1440s'
@@ -44,10 +44,10 @@ var express = require('express'),
                             token:token
                         });
                     }
-                })
+                });
             }
-        })
-    })
+        });
+    });
 
     //Protecting the views 
     apiRouter.use(function(req,res, next){

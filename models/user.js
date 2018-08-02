@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 //Importing the other tables relating to the User table
-var Task   = require('./tasks');
+var Task   = require('./tasks'),
+	Task_Label = require('./task_label');
 var User_Verification = require('./user_verification');
 
 // providing setters for the email schema
