@@ -17,11 +17,11 @@ function emailFormatter(email){
 var userSchema = new Schema({
 	fullname:{
 		type:String,
-		require:true,
+		required:true,
 	},
 	email:{
 		type:String,
-		require:true,
+		required:true,
 		unique: true,
 		set:emailFormatter
 	},
